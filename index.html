@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Cave Dweller</title>
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    </head>
+
+    <body>
+        <h1 class="d-flex justify-content-center">Cave Dweller</h1>
+        <div id="gameport" class="d-flex justify-content-center"></div>
+        <br>
+        <h2 class="d-flex justify-content-center">Instructions</h2>
+        <p class="d-flex justify-content-center">Navigate throught the cave to the diffrent abandoned homes.<br>
+            Inside each you will collect a charm. Once you have all 5 keys the exit will be revealed.<br>
+            Make sure not to get your soul stolen by those who came before you.</p>
+        <h3 class="d-flex justify-content-center">Controls</h3>
+        <div class="d-flex">
+            <ul class="list-inline mx-auto justify-content-center">
+                <li class="list-inline-item"><strong>W</strong>: Moves the explorer up</li><br>
+                <li class="list-inline-item"><strong>A</strong>: Moves the explorer left</li><br>
+                <li class="list-inline-item"><strong>S</strong>: Moves the explorer down</li><br>
+                <li class="list-inline-item"><strong>D</strong>: Moves the explorer right</li><br>
+            </ul>
+        </div>
+
+        <h2 class="d-flex justify-content-center">Comments</h2>
+        <div id="disqus_thread" class="d-flex justify-content-center"></div>
+        <script>
+            (function() {
+                var d = document, s = d.createElement('script');
+                s.src = 'http://nau-cs413.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+            })(); 
+        </script>
+
+        <!--Game Required Scripts-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="pixi.js"></script>
+        <script src="pixi-sound.js"></script>
+        <script src="game.js"></script>
+        <script src="tweenjs.min.js"></script>
+        <script src="tileUtilities.js"></script>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        
+    </body>
+</html>
