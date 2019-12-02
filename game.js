@@ -21,19 +21,18 @@ var player;
 var gameOver = false;
 var sheet;
 var Menu;
+var ghosts = new Array(51);
 
 var cell_width = 40;
 var cols = 100
 var rows = 100
 
-var map = [];
+var map = new Array(100);
 var charms = [5];
 for (var i = 0; i< 5; i++)
 {
 	charms[i] = false;
 }
-
-var ghosts = [];
 
 var start = new Point(6, 6);
 var playerPos = start;
@@ -163,7 +162,7 @@ function setup()
 		//console.log(jsonFile);
 		for( var x=0; x < rows; x++)
 		{
-			map[x] = [];
+			map[x] = new Array(100);
 			for(var y = 0; y < cols; y++)
 			{
 				//console.log((x*rows)+y);
@@ -172,6 +171,7 @@ function setup()
 				map[x][y]=cell;
 			}
 		}
+		spawnGhost();
 	});
 
 	badge_ui = new PIXI.Sprite(badgesSheet.textures["badges1.png"]);
@@ -195,19 +195,40 @@ function setup()
 	player.moving = true;
 	stage.addChild(player);
 
-
-	var ghostTexture = PIXI.Texture.from("Ghost1.png");
-	/*
-	for(var i = 0; i < 50; i++)
+	function spawnGhost()
 	{
-		var ghost = new PIXI.Sprite(ghostTexture)
-		ghost.position.x = map[randInt(20, 80)][randInt(20, 80)].row;
-		ghost.position.y = map[randInt(20, 80)][randInt(20, 80)].col;
-		ghost.zIndex = 14;
-		stage.addChild(ghost);
-		ghost.push(ghost);
+		var ghostTexture = PIXI.Texture.from("Ghost1.png");
+		
+		for(var i = 0; i < 50; i++)
+		{
+			//var ghost = new PIXI.Sprite(ghostTexture)
+			
+			var tempX = randInt(6, 80);
+			var tempY = randInt(6, 80);
+			var tempCell = map[tempX][tempY];
+			while (tempCell.type != 2)
+			{
+				tempX = randInt(6, 80);
+				tempY = randInt(6, 80);
+				tempCell = map[tempX][tempY];
+			}
+			var ghost = new Ghost(tempX, tempY)
+			ghost.sprite = new PIXI.Sprite(ghostTexture);
+			ghost.sprite.position.x = tempX * cell_width;
+			ghost.sprite.position.y = tempY * cell_width;
+			ghost.sprite.zIndex = 14;
+			stage.addChild(ghost.sprite);
+			ghosts.push(ghost);
+			//console.log("Ghost " + i + " spawned at x: " + tempX + ", y: " + tempY);
+		}
+		var ghost = new Ghost(10, 10)
+		ghost.sprite = new PIXI.Sprite(ghostTexture);
+		ghost.sprite.position.x = 10 * cell_width;
+		ghost.sprite.position.y = 10 * cell_width;
+		ghost.sprite.zIndex = 14;
+		stage.addChild(ghost.sprite);
+		ghosts[51] = ghost;
 	}
-	*/
 
 	playMusic();
 	animate();
@@ -282,11 +303,11 @@ function move()
 		{
 			player.moving = true;
 			playerPos.y -=1;
+			checkCharms(playerPos.x, playerPos.y);
 			var newX = player.position.x - 40;
-			createjs.Tween.get(player).to({x: newX, y: player.position.y}, 250).call(move);
+			createjs.Tween.get(player).to({x: newX, y: player.position.y}, 250);
 			var newbadgeX = badge_ui.position.x -40;
 			createjs.Tween.get(badge_ui).to({x: newbadgeX, y: badge_ui.position.y}, 250).call(move);
-			checkCharms(playerPos.x, playerPos.y);
 		}
 		else
 		{
@@ -305,12 +326,11 @@ function move()
 		{
 			player.moving = true;
 			playerPos.y+=1;
+			checkCharms(playerPos.x, playerPos.y);
 			var newX = player.position.x + 40;
-			createjs.Tween.get(player).to({x: newX, y: player.position.y}, 250).call(move);
+			createjs.Tween.get(player).to({x: newX, y: player.position.y}, 250);
 			var newbadgeX = badge_ui.position.x + 40;
 			createjs.Tween.get(badge_ui).to({x: newbadgeX, y: badge_ui.position.y}, 250).call(move);
-			checkCharms(playerPos.x, playerPos.y);
-	
 		}
 		else
 		{
@@ -329,11 +349,11 @@ function move()
 		{
 			player.moving = true;
 			playerPos.x-=1;
+			checkCharms(playerPos.x, playerPos.y);
 			var newy = player.position.y - 40;
-			createjs.Tween.get(player).to({y: newy}, 250).call(move);
+			createjs.Tween.get(player).to({y: newy}, 250);
 			var newbadgeY = badge_ui.position.y - 40;
 			createjs.Tween.get(badge_ui).to({x: badge_ui.position.x, y: newbadgeY}, 250).call(move);
-			checkCharms(playerPos.x, playerPos.y);
 		}
 		else
 		{
@@ -352,11 +372,11 @@ function move()
 		{
 			player.moving = true;
 			playerPos.x+=1;
+			checkCharms(playerPos.x, playerPos.y);
 			var newY = player.position.y + 40;
 			createjs.Tween.get(player).to({x: player.position.x, y: newY}, 250).call(move);
 			var newbadgeY = badge_ui.position.y + 40;
 			createjs.Tween.get(badge_ui).to({x: badge_ui.position.x, y: newbadgeY}, 250).call(move);
-			checkCharms(playerPos.x, playerPos.y);
 		}
 		else
 		{
@@ -385,6 +405,7 @@ window.addEventListener("keydown", function (e) {
 	player.direction = MOVE_RIGHT;
 
   move();
+  moveAI()
 });
 
 // Keyup events end movement
@@ -494,6 +515,13 @@ function Cell(x, y, type)
 	}
 }
 
+function Ghost(x,y)
+{
+	this.x = x;
+	this.y = y;
+	this.sprite;
+}
+
 function playMusic()
 {
 	PIXI.sound.play('music', {loop: true});
@@ -532,6 +560,63 @@ function update_camera()
 }
 
 function moveAI()
-{
-
+{	
+	for(var i = 0; i < 50; i++)
+	{
+		var validMove = false;
+		var ghost = ghosts[i];
+		var randNum = randInt(1,4);
+		while(!validMove)
+		{
+			switch(randNum)
+			{
+				case 1:
+					//MOVE_LEFT;
+					if(map[ghost.x][ghost.y-1].walkable)
+					{
+						validMove = true;
+						ghost.y -= 1;
+						var newX = ghost.x * cell_width;
+						var newY = ghost.y * cell_width;
+						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+					}
+					break;
+				case 2:
+					//MOVE_RIGHT;
+					if(map[ghost.x][ghost.y+1].walkable)
+					{
+						validMove = true;
+						ghost.y += 1;
+						var newX = ghost.x * cell_width;
+						var newY = ghost.y * cell_width;
+						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+					}
+					break;
+				case 3:
+					//MOVE_UP;
+					if(map[ghost.x-1][ghost.y].walkable)
+					{
+						validMove = true;
+						ghost.x -= 1;
+						var newX = ghost.x * cell_width;
+						var newY = ghost.y * cell_width;
+						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+					}
+					break;
+				case 4:
+					//MOVE_DOWN;
+					if(map[ghost.x+1][ghost.y].walkable)
+					{
+						validMove = true;
+						ghost.x += 1;
+						var newX = ghost.x * cell_width;
+						var newY = ghost.y * cell_width;
+						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+					}
+					break;
+			}
+			var randNum = randInt(1,4);
+		}		
+	}	
 }
+
