@@ -529,7 +529,6 @@ function playMusic()
 
 function animate()
 {
-	
 	requestAnimationFrame(animate);
 	update_camera();
 	renderer.render(stage);
@@ -600,7 +599,7 @@ function moveAI()
 					if(map[ghost.xPos-1][ghost.yPos].walkable)
 					{
 						validMove = true;
-						ghosts[i].x -= 1;
+						ghosts[i].xPos -= 1;
 						var newX = ghost.xPos * cell_width;
 						var newY = ghost.yPos * cell_width;
 						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
@@ -620,6 +619,17 @@ function moveAI()
 			}
 			var randNum = randInt(1,4);
 		}		
-	}	
+	}
+	checkCollision();	
 }
 
+function checkCollision()
+{
+	for(var i = 0; i < 51; i++)
+	{
+		if(ghosts[i].xPos == playerPos.x && ghosts[i].yPos == playerPos.y)
+		{
+			endGame();
+		}
+	}
+}
