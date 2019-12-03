@@ -391,6 +391,7 @@ window.addEventListener("keydown", function (e) {
   if (!player) return;
   if (player.moving) return;
   if (e.repeat == true) return;
+  if (gameOver) return;
   
   player.direction = MOVE_NONE;
 
@@ -535,13 +536,11 @@ function animate()
 }
 
 function endGame(y, x)
-{
-	stage.addChild(Menu);
-	stage.addChild(gameOverText);
-	stage.addChild(restartText);
-	gameOver = true;
-	stage.x = x -60;
-	stage.y = y-60;
+{	
+    stage.addChild(Menu);
+    stage.addChild(gameOverText);
+    stage.addChild(restartText);
+    gameOver = true;
 }
 
 function randInt(min, max)
@@ -551,11 +550,17 @@ function randInt(min, max)
 
 function update_camera()
 {
-  if(gameOver) return;
+  if(gameOver) 
+  {
+	stage.x = -55;
+	stage.y = -40;
+  }
+  else{
   stage.x = -player.x*GAME_SCALE + GAME_WIDTH/2 - player.width/2*GAME_SCALE;
   stage.y = -player.y*GAME_SCALE + GAME_HEIGHT/2 - player.height/2*GAME_SCALE;
   stage.x = -Math.max(0, Math.min(4000*GAME_SCALE - GAME_WIDTH, -stage.x));
   stage.y = -Math.max(0, Math.min(4000*GAME_SCALE - GAME_HEIGHT, -stage.y));
+  }
 }
 
 function moveAI()
