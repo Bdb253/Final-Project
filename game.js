@@ -404,7 +404,8 @@ window.addEventListener("keydown", function (e) {
 	player.direction = MOVE_RIGHT;
 
   move();
-  moveAI()
+  moveAI();
+  player.direction = MOVE_NONE;
 });
 
 // Keyup events end movement
