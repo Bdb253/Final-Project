@@ -218,9 +218,9 @@ function setup()
 			stage.addChild(ghost);
 			var ghostObj = new Ghost(tempX, tempY, ghost);
 			ghosts[i] = ghostObj;
-			console.log("Ghost " + i + " spawned at x: " + tempX + ", y: " + tempY);
+			//console.log("Ghost " + i + " spawned at x: " + tempX + ", y: " + tempY);
 		}
-		console.log("Ghost 50 spawned at x: " + 10 + ", y: " + 10);
+		//console.log("Ghost 50 spawned at x: " + 10 + ", y: " + 10);
 		var ghost = new PIXI.Sprite(ghostTexture);
 		ghost.position.x = 10 * cell_width;
 		ghost.position.y = 10 * cell_width;
@@ -585,7 +585,9 @@ function moveAI()
 						ghosts[i].yPos -= 1;
 						var newX = ghost.xPos * cell_width;
 						var newY = ghost.yPos * cell_width;
-						createjs.Tween.get(ghost.sprite).to({x: newX, y: newY}, 250);
+						//createjs.Tween.get(ghost.sprite).to({x: newX, y: newY}, 5);
+						ghosts[i].sprite.position.x = newX;
+						ghosts[i].sprite.position.y = newY;
 					}
 					break;
 				case 2:
@@ -596,7 +598,8 @@ function moveAI()
 						ghosts[i].yPos += 1;
 						var newX = ghost.xPos * cell_width;
 						var newY = ghost.yPos * cell_width;
-						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+						ghosts[i].sprite.position.x = newX;
+						ghosts[i].sprite.position.y = newY;
 					}
 					break;
 				case 3:
@@ -607,7 +610,9 @@ function moveAI()
 						ghosts[i].xPos -= 1;
 						var newX = ghost.xPos * cell_width;
 						var newY = ghost.yPos * cell_width;
-						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+						//createjs.Tween.get(ghost).to({x: newX, y: newY}, 5);
+						ghosts[i].sprite.position.x = newX;
+						ghosts[i].sprite.position.y = newY;
 					}
 					break;
 				case 4:
@@ -618,7 +623,9 @@ function moveAI()
 						ghosts[i].xPos += 1;
 						var newX = ghost.xPos * cell_width;
 						var newY = ghost.yPos * cell_width;
-						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+						//createjs.Tween.get(ghost).to({x: newX, y: newY}, 5);
+						ghosts[i].sprite.position.x = newX;
+						ghosts[i].sprite.position.y = newY;
 					}
 					break;
 			}
