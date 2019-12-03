@@ -201,7 +201,7 @@ function setup()
 		
 		for(var i = 0; i < 50; i++)
 		{
-			//var ghost = new PIXI.Sprite(ghostTexture)
+			var ghost = new PIXI.Sprite(ghostTexture)
 			
 			var tempX = randInt(6, 80);
 			var tempY = randInt(6, 80);
@@ -212,22 +212,22 @@ function setup()
 				tempY = randInt(6, 80);
 				tempCell = map[tempX][tempY];
 			}
-			var ghost = new Ghost(tempX, tempY)
-			ghost.sprite = new PIXI.Sprite(ghostTexture);
-			ghost.sprite.position.x = tempX * cell_width;
-			ghost.sprite.position.y = tempY * cell_width;
-			ghost.sprite.zIndex = 14;
-			stage.addChild(ghost.sprite);
-			ghosts.push(ghost);
-			//console.log("Ghost " + i + " spawned at x: " + tempX + ", y: " + tempY);
+			ghost.position.x = tempX * cell_width;
+			ghost.position.y = tempY * cell_width;
+			ghost.zIndex = 14;
+			stage.addChild(ghost);
+			var ghostObj = new Ghost(tempX, tempY, ghost);
+			ghosts[i] = ghostObj;
+			console.log("Ghost " + i + " spawned at x: " + tempX + ", y: " + tempY);
 		}
-		var ghost = new Ghost(10, 10)
-		ghost.sprite = new PIXI.Sprite(ghostTexture);
-		ghost.sprite.position.x = 10 * cell_width;
-		ghost.sprite.position.y = 10 * cell_width;
-		ghost.sprite.zIndex = 14;
-		stage.addChild(ghost.sprite);
-		ghosts[51] = ghost;
+		console.log("Ghost 50 spawned at x: " + 10 + ", y: " + 10);
+		var ghost = new PIXI.Sprite(ghostTexture);
+		ghost.position.x = 10 * cell_width;
+		ghost.position.y = 10 * cell_width;
+		ghost.zIndex = 14;
+		stage.addChild(ghost);
+		var ghostObj = new Ghost(10, 10, ghost);
+		ghosts[i] = ghostObj;
 	}
 
 	playMusic();
@@ -285,7 +285,6 @@ function move()
 	if (player.direction == MOVE_NONE)
 	{
 		player.moving = false;
-		moveAI();
 		//console.log("y: " + ((player.y-20)/40));
 		//console.log("x: " + ((player.x-20)/40));
     	return;
@@ -515,11 +514,11 @@ function Cell(x, y, type)
 	}
 }
 
-function Ghost(x,y)
+function Ghost(x, y, sprite)
 {
-	this.x = x;
-	this.y = y;
-	this.sprite;
+	this.xPos = x;
+	this.yPos = y;
+	this.sprite = sprite;
 }
 
 function playMusic()
@@ -561,10 +560,13 @@ function update_camera()
 
 function moveAI()
 {	
-	for(var i = 0; i < 50; i++)
+	for(var i = 0; i < 51; i++)
 	{
 		var validMove = false;
 		var ghost = ghosts[i];
+		//console.log(ghosts[i]);
+		//console.log("GX: " + ghosts[i].xPos);
+		//console.log("GY: " + ghosts[i].yPos);
 		var randNum = randInt(1,4);
 		while(!validMove)
 		{
@@ -572,45 +574,45 @@ function moveAI()
 			{
 				case 1:
 					//MOVE_LEFT;
-					if(map[ghost.x][ghost.y-1].walkable)
+					if(map[ghost.xPos][ghost.yPos - 1].walkable)
 					{
 						validMove = true;
-						ghost.y -= 1;
-						var newX = ghost.x * cell_width;
-						var newY = ghost.y * cell_width;
-						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
+						ghosts[i].yPos -= 1;
+						var newX = ghost.xPos * cell_width;
+						var newY = ghost.yPos * cell_width;
+						createjs.Tween.get(ghost.sprite).to({x: newX, y: newY}, 250);
 					}
 					break;
 				case 2:
 					//MOVE_RIGHT;
-					if(map[ghost.x][ghost.y+1].walkable)
+					if(map[ghost.xPos][ghost.yPos+1].walkable)
 					{
 						validMove = true;
-						ghost.y += 1;
-						var newX = ghost.x * cell_width;
-						var newY = ghost.y * cell_width;
+						ghosts[i].yPos += 1;
+						var newX = ghost.xPos * cell_width;
+						var newY = ghost.yPos * cell_width;
 						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
 					}
 					break;
 				case 3:
 					//MOVE_UP;
-					if(map[ghost.x-1][ghost.y].walkable)
+					if(map[ghost.xPos-1][ghost.yPos].walkable)
 					{
 						validMove = true;
-						ghost.x -= 1;
-						var newX = ghost.x * cell_width;
-						var newY = ghost.y * cell_width;
+						ghosts[i].x -= 1;
+						var newX = ghost.xPos * cell_width;
+						var newY = ghost.yPos * cell_width;
 						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
 					}
 					break;
 				case 4:
 					//MOVE_DOWN;
-					if(map[ghost.x+1][ghost.y].walkable)
+					if(map[ghost.xPos+1][ghost.yPos].walkable)
 					{
 						validMove = true;
-						ghost.x += 1;
-						var newX = ghost.x * cell_width;
-						var newY = ghost.y * cell_width;
+						ghosts[i].xPos += 1;
+						var newX = ghost.xPos * cell_width;
+						var newY = ghost.yPos * cell_width;
 						createjs.Tween.get(ghost).to({x: newX, y: newY}, 250);
 					}
 					break;
